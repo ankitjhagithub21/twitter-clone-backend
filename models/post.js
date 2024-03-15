@@ -10,9 +10,8 @@ const postSchema = new mongoose.Schema({
         default: []
     },
     user: {
-        userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User"
+        userId:{
+            type:String,
         },
         name:{
             type:String,
@@ -20,6 +19,9 @@ const postSchema = new mongoose.Schema({
         username: {
             type: String,
 
+        },
+        image:{
+            type:String,
         }
     },
 

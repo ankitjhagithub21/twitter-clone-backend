@@ -28,6 +28,7 @@ postRouter.post("/create", verifyToken, async (req, res) => {
                 userId: existingUser._id,
                 name: existingUser.name,
                 username: existingUser.username,
+                image:existingUser.image
             }
         });
 
@@ -108,7 +109,7 @@ postRouter.delete("/delete/:id",verifyToken,async(req,res)=>{
                 message:"User not found."
             })
         }
-        const deletedPost = await Post.findById(postId)
+        const deletedPost = await Post.findByIdAndDelete(postId)
         if(!deletedPost){
             return res.status(400).json({
                 success:false,
