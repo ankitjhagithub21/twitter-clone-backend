@@ -137,21 +137,28 @@ userRouter.put("/followers/remove/:id", verifyToken, async (req, res) => {
             return res.status(404).json({ success: false, message: "User or follower not found." });
         }
 
-        const index = user.followers.findIndex(u => u._id.equals(followerId));
+        const userFollowerIndex = user.followers.findIndex(u => u._id == followerId );
+        const followerFollowingIndex = follower.following.findIndex(u => u._id==userId);
 
-        if (index === -1) {
+        if (userFollowerIndex === -1) {
             return res.status(400).json({ success: false, message: "Follower not found." });
         }
 
-        user.followers.splice(index, 1);
+        // Remove follower from user's followers list
+        user.followers.splice(userFollowerIndex, 1);
+
+        // Remove user from follower's following list
+        follower.following.splice(followerFollowingIndex, 1);
 
         await user.save();
+        await follower.save();
 
         res.status(200).json({ success: true, message: `Follower ${follower.username} removed successfully.` });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
 });
+
 
 // Update profile route
 userRouter.put("/update", verifyToken, async (req, res) => {
