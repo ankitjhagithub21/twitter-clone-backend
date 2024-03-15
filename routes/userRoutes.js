@@ -85,6 +85,64 @@ userRouter.put("/follow/:id", verifyToken, async (req, res) => {
     }
 });
 
+//get all following user
+
+userRouter.get("/following", verifyToken, async (req, res) => {
+    try {
+        const userId = req.id;
+        const user = await User.findById(userId); // Corrected variable name
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: "Unauthorized!"
+            });
+        }
+        const followingUsers = user.following;
+        res.status(200).json({
+            success: true,
+            followingUsers
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
+
+
+//update profile route
+
+userRouter.put("/update", verifyToken, async (req, res) => {
+    try {
+        const { name, bio, location, image } = req.body;
+        const userId = req.id;
+        const user = await User.findByIdAndUpdate(userId, {
+            name,
+            bio,
+            location,
+            image
+        }, { new: true }); 
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: "Unauthorized!"
+            });
+        }
+        res.status(200).json({
+            success: true,
+            message: "Profile updated successfully.",
+            user // Optionally return the updated user
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
+
+
 
 
 module.exports = userRouter

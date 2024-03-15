@@ -19,6 +19,9 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    bio:{
+        type:String,
+    },
     location:{
         type:String,
     },
@@ -33,6 +36,7 @@ const userSchema = new mongoose.Schema({
         type:Array,
         default:[]
     }
+
 
 },{timestamps:true})
 const User = mongoose.model('user',userSchema)
